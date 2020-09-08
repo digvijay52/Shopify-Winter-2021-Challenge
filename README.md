@@ -48,3 +48,17 @@ Using Power BI we can easily do basic EDA statistics for the given data in order
     factors for the data anomalies.
   - IMP NOTE: The sentences in the influnecers section of the graph should not be taken literally as they do not actaully represent the entire data, thus 
     this is not the best way to analyze outliers.
+    
+    
+*Question 2: For this question you’ll need to use SQL. Follow this link to access the data set required for the challenge. Please use queries to answer the following questions. Paste your queries along with your final numerical answers below.*
+
+### How many orders were shipped by Speedy Express in total?
+- Query: SELECT sum(Quantity) from [OrderDetails] where OrderID in (SELECT OrderID FROM [Orders] where [ShipperID] == 1)
+- Answer: 3575 Orders
+### What is the last name of the employee with the most orders?
+- Query: SELECT count(OrderDetailID), Orders.EmployeeID, LastName FROM ((OrderDetails LEFT JOIN Orders ON OrderDetails.OrderID = Orders.OrderID) LEFT JOIN Employees ON Orders.EmployeeID = Employees.EmployeeID) GROUP BY Orders.EmployeeID
+- Answer: 123 - Peacock
+### What product was ordered the most by customers in Germany?
+- Query: SELECT * FROM Products WHERE ProductID in (SELECT ProductID FROM (SELECT Max(Total),ProductID FROM (SELECT SUM(Quantity) as Total, ProductID FROM OrderDetails INNER JOIN (SELECT * FROM Orders WHERE CustomerID IN (SELECT CustomerID FROM Customers WHERE Country == 'Germany')) as Y ON OrderDetails.OrderID == Y.OrderID GROUP BY ProductID)))
+- Answer: 40ID - Boston Crab Meat
+
